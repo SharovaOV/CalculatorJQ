@@ -64,6 +64,8 @@
             display_element.text(0);
             return;
         }
+        if (display_element.text().slice(-1) == ".")
+            isPoint = false;
         display_element.text(display_element.text().slice(0,-1));
     });
 
@@ -87,7 +89,7 @@
     //Вставить из памяти
     $("#MR").on("click", function () {
         display_element.text(memoryVal);
-        isNewValue = true;
+        newNumber();
     });
     //Сброс памяти
     $("#MC").on("click", function () {
@@ -110,20 +112,22 @@
             $("#result").click();
             value1 = +display_element.text();
         }
-        console.log(action);
-        isNewValue=true;
+        newNumber();
     });
+    //Приготовиться вводить новое число
+    function newNumber() {
+        isNewValue = true;
+        isPoint = false;
+    }
     //Обнуление параметров
     function reset() {
         value1 = 0;
         valueSet1 = false;
         value2 = 0;
-        isNewValue = true;
-        isPoint = false;
+        newNumber();
         action = "";
     }
     function result() {
-        console.log("result "+action);
         let res;
         switch (action) {
             case "+":
@@ -176,7 +180,6 @@
     });
     //Вычисление результатов простых математических действий
     $("#result").on("click", function () {
-        console.log("click "+action);
         if(action == "")
         return;
         value2 = + display_element.text();
@@ -200,13 +203,13 @@
             return;
         }
         display_element.text(Math.sqrt(val));
-        isNewValue = true;
+        newNumber();
     });
     //Число в -1 степени
     $("#pow_minus_one").on("click", function () {
         let val = +display_element.text();
         display_element.text(1 / val);
-        isNewValue = true;
+        newNumber();
     });
     //Сброс оследнего числа или всех данных
     $("#CE_C").on("click", function () {
@@ -214,8 +217,7 @@
         if (!CE_press) {
             CE_press = true;
             display_element.text("0");
-            isNewValue = true;
-            console.log("CE");
+            newNumber();
             $(".calc_button").not("#CE_C").on("click", CE_Reset);
         }
         else {
@@ -224,15 +226,12 @@
             taxVal = 0;
             display_element.text("0");
             CE_Reset();
-            console.log("C");
         }
-        console.log(CE_press);
     });
     function CE_Reset()
     {
         CE_press = false;
         $(".calc_button").not("#CE_C").off("click", CE_Reset);
-        console.log("CE_Reset");
     }
     
     //------------------------------------------------
